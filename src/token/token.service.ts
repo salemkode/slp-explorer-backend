@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { FullstackService } from 'src/fullstack/fullstack.service';
 import { IndexerService } from 'src/indexer/indexer.service';
 import { TxService } from 'src/transactions/tx.service';
 import { indexer_slp_tx } from 'src/transactions/tx.type';
@@ -15,6 +16,7 @@ export class TokenService {
   constructor(
     private IndexerService: IndexerService,
     private TxService: TxService,
+    private fullstack: FullstackService,
   ) {}
 
   //
@@ -43,6 +45,23 @@ export class TokenService {
     { tokenData }: indexer_slp_token,
     { txData }: indexer_slp_tx,
   ): Promise<formated_slp_token> {
+    //
+    let time = txData.time || txData.blocktime;
+
+    // Get time from fullstack when not available in slp indexer
+    if (!time) {
+      const _txData = await this.fullstack.getTransactionDetails(txData.txid);
+
+      //
+      time = _txData.details.time || _txData.details.blocktime;
+
+      // Transaction not confirmed
+      if (!time) {
+        time = 0;
+      }
+    }
+
+    //
     return {
       details: {
         tokenId: tokenData.tokenId,
