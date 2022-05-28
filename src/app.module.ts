@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TxModule } from './transactions/tx.module';
 
-import configuration from "./config/configuration";
+import configuration from './config/configuration';
 import { TokenModule } from './token/token.module';
 import { AddressModule } from './address/address.module';
 @Module({
@@ -12,7 +12,7 @@ import { AddressModule } from './address/address.module';
     AddressModule,
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [configuration]
+      load: [configuration],
     }),
   ],
   controllers: [],
