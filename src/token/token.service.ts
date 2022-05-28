@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { FullstackService } from 'src/fullstack/fullstack.service';
 import { IndexerService } from 'src/indexer/indexer.service';
 import { TxService } from 'src/transactions/tx.service';
@@ -21,11 +21,15 @@ export class TokenService {
 
   //
   fatchTokenData(tokenId: string, withTxHistory = false) {
-    // Return result data
-    return this.IndexerService.post<indexer_slp_token>('token', {
-      tokenId,
-      withTxHistory,
-    });
+    try {
+      // Return result data
+      return this.IndexerService.post<indexer_slp_token>('token', {
+        tokenId,
+        withTxHistory,
+      });
+    } catch (_err) {
+      throw new BadRequestException('This is not a slp token');
+    }
   }
 
   //

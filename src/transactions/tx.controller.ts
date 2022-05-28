@@ -6,7 +6,7 @@ export class TxController {
   constructor(private readonly txService: TxService) {}
 
   @Get('/:txid')
-  async getTransactions(@Param('txid') txid) {
+  async getTransactions(@Param('txid') txid: string) {
     return await this.txService.getTxData(txid);
   }
 }

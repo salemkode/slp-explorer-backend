@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { AxiosError } from 'axios';
 import { toSlpAddress } from 'bchaddrjs-slp';
 import { FullstackService } from 'src/fullstack/fullstack.service';
 import { IndexerService } from 'src/indexer/indexer.service';
@@ -13,10 +14,17 @@ export class TxService {
 
   //
   fatchTxData(txid: string): Promise<indexer_slp_tx> {
-    // Return result data
-    return this.IndexerService.post<indexer_slp_tx>('txid', {
-      txid,
-    });
+    try {
+      // Return result data
+      return this.IndexerService.post<indexer_slp_tx>('txid', {
+        txid,
+      });
+    } catch (_err) {
+      const error = _err as AxiosError<{ error: string; success: number }>;
+
+      //
+      throw new BadRequestException(error.response.data.error);
+    }
   }
 
   //
