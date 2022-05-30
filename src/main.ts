@@ -11,6 +11,9 @@ async function bootstrap() {
   // Get port from config app
   const port = configService.get('port');
 
+  // Enable for use in all website
+  app.enableCors();
+
   // start app
   await app.listen(port);
 }
