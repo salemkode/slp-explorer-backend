@@ -1,5 +1,4 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { Axios, AxiosError } from 'axios';
 import { isValidAddress, toCashAddress } from 'bchaddrjs-slp';
 import { IndexerService } from 'src/indexer/indexer.service';
 import { TokenService } from 'src/token/token.service';
@@ -137,7 +136,8 @@ export class AddressService {
         txid: tx.txid,
         type: txData.tokenTxType,
         qty,
-        token: txData.tokenId,
+        tokenId: txData.tokenId,
+        tokenName: txData.tokenName,
       };
     }
 

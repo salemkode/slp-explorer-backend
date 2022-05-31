@@ -43,7 +43,8 @@ export interface formated_slp_address {
       txid: string;
       type: string;
       qty: number;
-      token: string;
+      tokenId: string;
+      tokenName: string;
     }[];
   };
 }
