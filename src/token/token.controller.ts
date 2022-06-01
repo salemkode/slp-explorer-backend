@@ -11,7 +11,7 @@ export class TokenController {
     return await this.tokenService.getTokenData(tokenid);
   }
 
-  @Get('/:tokenid/txs/:index')
+  @Get('/:tokenid/tx/:index')
   async getTokenTxsIndex(
     @Param('tokenid') tokenid: string,
     @Param('index') index: string,
