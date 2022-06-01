@@ -4,6 +4,7 @@ import { IndexerService } from 'src/indexer/indexer.service';
 import { TxService } from 'src/transactions/tx.service';
 import { indexer_slp_tx } from 'src/transactions/tx.type';
 import { slice } from 'src/util/slice';
+import BigNumber from 'big.js';
 import {
   indexer_slp_token,
   formated_slp_token,
@@ -117,14 +118,24 @@ export class TokenService {
     return {
       allPage: Math.ceil(tokenData.txs.length / 7),
       currentPage: index + 1,
-      txs: await this.getTxsWithTime(tokenData.txs, index),
+      txs: await this.getTxsWithTime(tokenData.txs, index, tokenData.decimals),
     };
+  }
+
+  //
+  getRealQty(qty: string, decimals: number): string {
+    //
+    const bigNumberQty = new BigNumber(qty);
+
+    //
+    return bigNumberQty.div(10 ** decimals).toString();
   }
 
   //
   async getTxsWithTime(
     txs: indexer_slp_token['tokenData']['txs'],
     i: number,
+    decimals: number,
   ): Promise<formated_slp_token['tx']['txs']> {
     //
     type formatedTxType = formated_slp_token['tx']['txs'][0];
@@ -154,7 +165,7 @@ export class TokenService {
       return {
         txid,
         block: height,
-        qty,
+        qty: this.getRealQty(qty, decimals),
         type,
         time,
       };
