@@ -204,6 +204,7 @@ export class AddressService {
 
     //
     return {
+      length: balance.length,
       allPage: Math.ceil(balances.length / 7),
       currentPage: index + 1,
       balances: await this.getBalances(balances, index),
@@ -218,6 +219,7 @@ export class AddressService {
   ): Promise<formated_slp_address['transaction']> {
     //
     return {
+      length: transaction.length,
       allPage: Math.ceil(transaction.length / 7),
       currentPage: index + 1,
       transactions: await this.getTransactions(transaction, address, index),

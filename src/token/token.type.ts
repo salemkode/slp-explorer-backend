@@ -50,6 +50,7 @@ export interface formated_slp_token {
     qtyAddresses: number;
   };
   tx: {
+    length: number;
     allPage: number;
     currentPage: number;
     txs: {

@@ -116,6 +116,7 @@ export class TokenService {
 
     //
     return {
+      length: tokenData.txs.length,
       allPage: Math.ceil(tokenData.txs.length / 7),
       currentPage: index + 1,
       txs: await this.getTxsWithTime(tokenData.txs, index, tokenData.decimals),

@@ -44,11 +44,13 @@ export type transaction_item = {
 //
 export interface formated_slp_address {
   balance: {
+    length: number;
     allPage: number;
     currentPage: number;
     balances: balance_item[];
   };
   transaction: {
+    length: number;
     allPage: number;
     currentPage: number;
     transactions: transaction_item[];
