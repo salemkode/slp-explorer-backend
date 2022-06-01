@@ -1,5 +1,4 @@
-import { BadRequestException, Controller, Get, Param } from '@nestjs/common';
-import { isValidAddress, toCashAddress } from 'bchaddrjs-slp';
+import { Controller, Get, Param } from '@nestjs/common';
 import { AddressService } from './address.service';
 
 @Controller('/address')
@@ -39,6 +38,10 @@ export class AddressController {
     const { balance } = await this.AddressService.fatchAddressData(address);
 
     //
-    return this.AddressService.getFormatedTransactions(balance.txs, +index);
+    return this.AddressService.getFormatedTransactions(
+      balance.txs,
+      address,
+      +index,
+    );
   }
 }

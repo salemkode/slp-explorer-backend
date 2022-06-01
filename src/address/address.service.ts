@@ -3,8 +3,13 @@ import { isValidAddress, toCashAddress } from 'bchaddrjs-slp';
 import { IndexerService } from 'src/indexer/indexer.service';
 import { TokenService } from 'src/token/token.service';
 import { TxService } from 'src/transactions/tx.service';
-import { slice } from 'src/util/slice';
-import { formated_slp_address, indexer_slp_address } from './address.type';
+import { reverse, slice } from 'src/util/slice';
+import {
+  balance_item,
+  formated_slp_address,
+  indexer_slp_address,
+  transaction_item,
+} from './address.type';
 
 @Injectable()
 export class AddressService {
@@ -52,16 +57,17 @@ export class AddressService {
     const addressData = await this.fatchAddressData(address);
 
     // Formated data
-    return await this.formatAddressData(addressData);
+    return await this.formatAddressData(addressData, address);
   }
 
   //
-  async formatAddressData({
-    balance,
-  }: indexer_slp_address): Promise<formated_slp_address> {
+  async formatAddressData(
+    { balance }: indexer_slp_address,
+    address: string,
+  ): Promise<formated_slp_address> {
     return {
       balance: await this.getFormatedBalance(balance.balances),
-      transaction: await this.getFormatedTransactions(balance.txs),
+      transaction: await this.getFormatedTransactions(balance.txs, address),
     };
   }
 
@@ -69,9 +75,8 @@ export class AddressService {
   async getBalances(
     balances: indexer_slp_address['balance']['balances'],
     index = 0,
-  ): Promise<formated_slp_address['balance']['balances']> {
-    type token = formated_slp_address['balance']['balances'][0];
-    const promises: Promise<token>[] = [];
+  ): Promise<balance_item[]> {
+    const promises: Promise<balance_item>[] = [];
 
     // Select 7 items by index
     const _balances = slice(balances, index * 7, (index + 1) * 7);
@@ -80,10 +85,9 @@ export class AddressService {
     const { TokenService } = this;
 
     //
-    async function getTokenPromise(token: {
-      tokenId: string;
-      qty: string;
-    }): Promise<token> {
+    async function getTokenPromise(
+      token: indexer_slp_address['balance']['balances'][0],
+    ): Promise<balance_item> {
       const { tokenData } = await TokenService.fatchTokenData(token.tokenId);
 
       //
@@ -107,13 +111,17 @@ export class AddressService {
   //
   async getTransactions(
     transactions: indexer_slp_address['balance']['txs'],
+    address: string,
     index = 0,
-  ): Promise<formated_slp_address['transaction']['transactions']> {
-    type Transactions = formated_slp_address['transaction']['transactions'][0];
+  ): Promise<transaction_item[]> {
+    type Transactions = transaction_item;
     const promises: Promise<Transactions>[] = [];
 
     // Select 7 items by index
-    const _transactions = slice(transactions, index * 7, (index + 1) * 7);
+    const _transactions = reverse(transactions).slice(
+      index * 7,
+      (index + 1) * 7,
+    );
 
     //
     const { TxService } = this;
@@ -125,16 +133,53 @@ export class AddressService {
       const { txData } = await TxService.fatchTxData(tx.txid);
 
       // Calc amount
-      const qty = txData.vout.reduce(
-        (previousValue, currentValue) => previousValue + currentValue.tokenQty,
-        0,
-      );
+      let qty = 0;
+      let type: transaction_item['type'] = 'RECV';
+
+      //
+      txData.vin.forEach((input) => {
+        if (input.address === address) {
+          if (input.tokenQty !== null) {
+            qty = qty + input.tokenQty;
+            type = 'SEND';
+          }
+        }
+      });
+
+      //
+      if (type === 'RECV') {
+        qty = 0;
+
+        //
+        txData.vout.forEach((input) => {
+          const addresses = input.scriptPubKey.addresses;
+
+          //
+          if (addresses && addresses.includes(address)) {
+            if (input.tokenQty !== null) {
+              qty = qty + input.tokenQty;
+            }
+          }
+        });
+      } else {
+        //
+        txData.vout.forEach((input) => {
+          const addresses = input.scriptPubKey.addresses;
+
+          //
+          if (addresses && addresses.includes(address)) {
+            if (input.tokenQty !== null) {
+              qty = qty - input.tokenQty;
+            }
+          }
+        });
+      }
 
       //
       return {
         block: +tx.height,
         txid: tx.txid,
-        type: txData.tokenTxType,
+        type,
         qty,
         tokenId: txData.tokenId,
         tokenName: txData.tokenName,
@@ -168,13 +213,14 @@ export class AddressService {
   //
   async getFormatedTransactions(
     transaction: indexer_slp_address['balance']['txs'],
+    address: string,
     index = 0,
   ): Promise<formated_slp_address['transaction']> {
     //
     return {
       allPage: Math.ceil(transaction.length / 7),
       currentPage: index + 1,
-      transactions: await this.getTransactions(transaction, index),
+      transactions: await this.getTransactions(transaction, address, index),
     };
   }
 }

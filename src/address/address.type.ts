@@ -24,27 +24,33 @@ export interface indexer_slp_address {
 }
 
 //
+export type balance_item = {
+  tokenId: string;
+  name: string;
+  ticker: string;
+  qty: string;
+};
+
+//
+export type transaction_item = {
+  block: number;
+  txid: string;
+  type: 'SEND' | 'RECV';
+  qty: number;
+  tokenId: string;
+  tokenName: string;
+};
+
+//
 export interface formated_slp_address {
   balance: {
     allPage: number;
     currentPage: number;
-    balances: {
-      tokenId: string;
-      name: string;
-      ticker: string;
-      qty: string;
-    }[];
+    balances: balance_item[];
   };
   transaction: {
     allPage: number;
     currentPage: number;
-    transactions: {
-      block: number;
-      txid: string;
-      type: string;
-      qty: number;
-      tokenId: string;
-      tokenName: string;
-    }[];
+    transactions: transaction_item[];
   };
 }
