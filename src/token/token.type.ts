@@ -4,12 +4,7 @@ export interface token_data__tx {
   height: number;
   type: 'GENESIS' | 'SEND' | 'MINT' | 'BURN-UNCONTROLLED' | 'SEND-BURN';
   qty: string;
-}
-
-// burn tx
-export interface token_data__burn_tx extends token_data__tx {
-  type: 'BURN-UNCONTROLLED' | 'SEND-BURN';
-  burned: string;
+  burned?: string;
 }
 
 //
@@ -28,7 +23,7 @@ export interface indexer_slp_token {
     blockCreated: number;
     totalMinted: string;
     totalBurned: string;
-    txs: Array<token_data__tx | token_data__burn_tx> | undefined;
+    txs: Array<token_data__tx> | undefined;
   };
 }
 

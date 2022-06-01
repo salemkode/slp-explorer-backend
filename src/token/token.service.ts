@@ -7,7 +7,6 @@ import { slice } from 'src/util/slice';
 import {
   indexer_slp_token,
   formated_slp_token,
-  token_data__burn_tx,
   token_data__tx,
 } from './token.type';
 
@@ -132,9 +131,7 @@ export class TokenService {
     const promises: Promise<formatedTxType>[] = [];
 
     //
-    const getTxWithTimePromise = async (
-      tx: token_data__tx | token_data__burn_tx,
-    ) => {
+    const getTxWithTimePromise = async (tx: token_data__tx) => {
       let time: number;
 
       //
@@ -149,7 +146,7 @@ export class TokenService {
       }
 
       //
-      if ('burned' in tx) {
+      if (tx.burned) {
         qty = tx.burned;
       }
 
@@ -167,7 +164,7 @@ export class TokenService {
     const _txs = slice(txs, i * 7, (i + 1) * 7);
 
     //
-    _txs.forEach((tx: token_data__tx | token_data__burn_tx) => {
+    _txs.forEach((tx: token_data__tx) => {
       promises.push(getTxWithTimePromise(tx));
     });
 
