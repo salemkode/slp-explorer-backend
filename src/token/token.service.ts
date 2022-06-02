@@ -1,5 +1,4 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { FullstackService } from 'src/fullstack/fullstack.service';
 import { IndexerService } from 'src/indexer/indexer.service';
 import { TxService } from 'src/transactions/tx.service';
 import { formated_slp_tx } from 'src/transactions/tx.type';
@@ -16,7 +15,6 @@ export class TokenService {
   constructor(
     private IndexerService: IndexerService,
     private TxService: TxService,
-    private fullstack: FullstackService,
   ) {}
 
   //
