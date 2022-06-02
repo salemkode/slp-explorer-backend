@@ -18,10 +18,10 @@ export class TokenService {
   ) {}
 
   //
-  fatchTokenData(tokenId: string, withTxHistory = false) {
+  async fatchTokenData(tokenId: string, withTxHistory = false) {
     try {
       // Return result data
-      return this.IndexerService.post<indexer_slp_token>('token', {
+      return await this.IndexerService.post<indexer_slp_token>('token', {
         tokenId,
         withTxHistory,
       });

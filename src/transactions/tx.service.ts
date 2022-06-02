@@ -13,10 +13,10 @@ export class TxService {
   ) {}
 
   //
-  fatchTxData(txid: string): Promise<indexer_slp_tx> {
+  async fatchTxData(txid: string): Promise<indexer_slp_tx> {
     try {
       // Return result data
-      return this.IndexerService.post<indexer_slp_tx>('txid', {
+      return await this.IndexerService.post<indexer_slp_tx>('txid', {
         txid,
       });
     } catch (_err) {
