@@ -37,12 +37,18 @@ export class TxService {
   }
 
   //
-  formatTxData({ txData }: indexer_slp_tx): formated_slp_tx {
+  async formatTxData({ txData }: indexer_slp_tx): Promise<formated_slp_tx> {
+    let time = txData.time;
+
+    //
+    if (!time) time = await this.getTranstionTime(txData.txid);
+
+    //
     return {
       details: {
         type: txData.tokenTxType,
         block: txData.blockheight,
-        time: txData.time,
+        time: time,
         txid: txData.txid,
         creator: this.getCreator(txData),
       },

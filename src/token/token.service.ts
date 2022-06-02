@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { FullstackService } from 'src/fullstack/fullstack.service';
 import { IndexerService } from 'src/indexer/indexer.service';
 import { TxService } from 'src/transactions/tx.service';
-import { indexer_slp_tx } from 'src/transactions/tx.type';
+import { formated_slp_tx } from 'src/transactions/tx.type';
 import { slice } from 'src/util/slice';
 import BigNumber from 'big.js';
 import {
@@ -38,7 +38,7 @@ export class TokenService {
     const tokenData = await this.fatchTokenData(tokenid, true);
 
     // Fatch transactions data from slp explorer
-    const txData = await this.TxService.fatchTxData(tokenid);
+    const txData = await this.TxService.getTxData(tokenid);
 
     // Formated data
     return await this.formatTokenData(tokenData, txData);
@@ -47,35 +47,19 @@ export class TokenService {
   //
   async formatTokenData(
     { tokenData }: indexer_slp_token,
-    { txData }: indexer_slp_tx,
+    { details }: formated_slp_tx,
   ): Promise<formated_slp_token> {
-    //
-    let time = txData.time || txData.blocktime;
-
-    // Get time from fullstack when not available in slp indexer
-    if (!time) {
-      const _txData = await this.fullstack.getTransactionDetails(txData.txid);
-
-      //
-      time = _txData.details.time || _txData.details.blocktime;
-
-      // Transaction not confirmed
-      if (!time) {
-        time = 0;
-      }
-    }
-
     //
     return {
       details: {
         tokenId: tokenData.tokenId,
         name: tokenData.name,
         ticker: tokenData.ticker,
-        creator: this.TxService.getCreator(txData),
+        creator: details.creator,
         decimals: tokenData.decimals,
         documentHash: tokenData.documentHash,
         documentUri: tokenData.documentUri,
-        time: txData.time,
+        time: details.time,
         type: this.getTypeName(tokenData.type),
       },
       stats: {
