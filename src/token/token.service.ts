@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  CACHE_MANAGER,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { IndexerService } from 'src/indexer/indexer.service';
 import { TxService } from 'src/transactions/tx.service';
 import { formated_slp_tx } from 'src/transactions/tx.type';
@@ -9,22 +14,52 @@ import {
   formated_slp_token,
   token_data__tx,
 } from './token.type';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class TokenService {
   constructor(
     private IndexerService: IndexerService,
     private TxService: TxService,
+    @Inject(CACHE_MANAGER) private CacheManager: Cache,
   ) {}
 
   //
-  async fatchTokenData(tokenId: string, withTxHistory = false) {
+  async fatchTokenData(tokenId: string, withTxHistory = false, _cache = false) {
     try {
+      //
+      const cacheKey = `token-${tokenId}`;
+
+      //
+      const cache = !withTxHistory && _cache;
+
+      //
+      if (cache) {
+        //
+        const cachedData = await this.CacheManager.get<indexer_slp_token>(
+          cacheKey,
+        );
+
+        //
+        if (cachedData) {
+          return cachedData;
+        }
+      }
+
+      //
+      const tokenData = await this.IndexerService.post<indexer_slp_token>(
+        'token',
+        {
+          tokenId,
+          withTxHistory,
+        },
+      );
+
+      //
+      if (cache) this.CacheManager.set(cacheKey, tokenData);
+
       // Return result data
-      return await this.IndexerService.post<indexer_slp_token>('token', {
-        tokenId,
-        withTxHistory,
-      });
+      return tokenData;
     } catch (_err) {
       throw new BadRequestException('This is not a slp token');
     }

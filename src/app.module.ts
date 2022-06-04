@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TxModule } from './transactions/tx.module';
 
@@ -13,6 +13,10 @@ import { AddressModule } from './address/address.module';
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],
+    }),
+    CacheModule.register({
+      isGlobal: true,
+      ttl: 30,
     }),
   ],
   controllers: [],

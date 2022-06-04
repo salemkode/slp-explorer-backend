@@ -1,6 +1,12 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  CACHE_MANAGER,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { AxiosError } from 'axios';
 import { toSlpAddress } from 'bchaddrjs-slp';
+import { Cache } from 'cache-manager';
 import { FullstackService } from 'src/fullstack/fullstack.service';
 import { IndexerService } from 'src/indexer/indexer.service';
 import { formated_slp_tx, indexer_slp_tx } from './tx.type';
@@ -10,15 +16,41 @@ export class TxService {
   constructor(
     private IndexerService: IndexerService,
     private Fullstack: FullstackService,
+    @Inject(CACHE_MANAGER) private CacheManager: Cache,
   ) {}
 
   //
-  async fatchTxData(txid: string): Promise<indexer_slp_tx> {
+  async fatchTxData(txid: string, cache = false): Promise<indexer_slp_tx> {
     try {
-      // Return result data
-      return await this.IndexerService.post<indexer_slp_tx>('txid', {
+      //
+      const cacheKey = `tx-${txid}`;
+
+      //
+      if (cache) {
+        //
+        const cachedData = await this.CacheManager.get<indexer_slp_tx>(
+          cacheKey,
+        );
+
+        //
+        console.log('cache request');
+
+        //
+        if (cachedData) {
+          return cachedData;
+        }
+      }
+
+      //
+      const txData = await this.IndexerService.post<indexer_slp_tx>('txid', {
         txid,
       });
+
+      //
+      if (cache) await this.CacheManager.set<indexer_slp_tx>(cacheKey, txData);
+
+      // Return result data
+      return txData;
     } catch (_err) {
       const error = _err as AxiosError<{ error: string; success: number }>;
 

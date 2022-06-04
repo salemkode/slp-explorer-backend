@@ -88,7 +88,11 @@ export class AddressService {
     async function getTokenPromise(
       token: indexer_slp_address['balance']['balances'][0],
     ): Promise<balance_item> {
-      const { tokenData } = await TokenService.fatchTokenData(token.tokenId);
+      const { tokenData } = await TokenService.fatchTokenData(
+        token.tokenId,
+        false,
+        true,
+      );
 
       //
       return {
@@ -130,7 +134,7 @@ export class AddressService {
     async function getTransactionsPromise(
       tx: indexer_slp_address['balance']['txs'][0],
     ): Promise<Transactions> {
-      const { txData } = await TxService.fatchTxData(tx.txid);
+      const { txData } = await TxService.fatchTxData(tx.txid, true);
 
       // Calc amount
       let qty = 0;
