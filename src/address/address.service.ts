@@ -104,9 +104,7 @@ export class AddressService {
     }
 
     //
-    _balances.forEach((token) => {
-      if (+token.qty) promises.push(getTokenPromise(token));
-    });
+    _balances.forEach((token) => promises.push(getTokenPromise(token)));
 
     //
     return Promise.all(promises);
@@ -204,14 +202,18 @@ export class AddressService {
     balance: indexer_slp_address['balance']['balances'],
     index = 0,
   ): Promise<formated_slp_address['balance']> {
-    const balances = await this.getBalances(balance, index);
+    //
+    const balanceWithoutEmptyToken = balance.filter((token) => +token.qty);
+
+    //
+    const balances = await this.getBalances(balanceWithoutEmptyToken, index);
 
     //
     return {
-      length: balance.length,
+      length: balanceWithoutEmptyToken.length,
       allPage: Math.ceil(balances.length / 7),
       currentPage: index + 1,
-      balances: await this.getBalances(balances, index),
+      balances,
     };
   }
 
