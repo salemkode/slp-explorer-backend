@@ -33,9 +33,6 @@ export class TxService {
         );
 
         //
-        console.log('cache request');
-
-        //
         if (cachedData) {
           return cachedData;
         }
