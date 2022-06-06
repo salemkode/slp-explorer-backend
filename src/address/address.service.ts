@@ -98,7 +98,7 @@ export class AddressService {
       return {
         tokenId: token.tokenId,
         name: tokenData.name,
-        qty: token.qty,
+        qty: TokenService.getRealQty(token.qty, tokenData.decimals),
         ticker: tokenData.ticker,
       };
     }
