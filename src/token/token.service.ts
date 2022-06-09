@@ -106,7 +106,7 @@ export class TokenService {
         tokensInCirculation: tokenData.tokensInCirculationStr,
       },
       tx: await this.getTxsInfo(tokenData),
-      nfts: this.getNftsChild(tokenData),
+      nft: this.getNftsChild(tokenData),
     };
   }
 
@@ -207,7 +207,7 @@ export class TokenService {
   getNftsChild(
     tokenData: indexer_slp_token['tokenData'],
     index = 0,
-  ): formated_slp_token['nfts'] {
+  ): formated_slp_token['nft'] {
     if (!tokenData.nfts) return;
 
     //
@@ -218,7 +218,7 @@ export class TokenService {
       length: tokenData.nfts.length,
       allPage: Math.ceil(tokenData.nfts.length / 7),
       currentPage: index + 1,
-      txs: slice(tokenData.nfts, index * 7, (index + 1) * 7),
+      nfts: slice(tokenData.nfts, index * 7, (index + 1) * 7),
     };
   }
 }

@@ -22,11 +22,11 @@ export class TokenController {
     return await this.tokenService.getTxsInfo(tokenData, +index);
   }
 
-  @Get('/:tokenid/nfts/:index')
+  @Get('/:tokenid/nft/:index')
   async getTokenNftsIndex(
     @Param('tokenid') tokenid: string,
     @Param('index') index: string,
-  ): Promise<formated_slp_token['nfts']> {
+  ): Promise<formated_slp_token['nft']> {
     const { tokenData } = await this.tokenService.fatchTokenData(tokenid, true);
 
     //

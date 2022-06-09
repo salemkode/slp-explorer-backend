@@ -64,10 +64,10 @@ export interface formated_slp_token {
       time: number;
     }[];
   };
-  nfts?: {
+  nft?: {
     length: number;
     allPage: number;
     currentPage: number;
-    txs: string[];
+    nfts: string[];
   };
 }
