@@ -23,7 +23,9 @@ export interface indexer_slp_token {
     blockCreated: number;
     totalMinted: string;
     totalBurned: string;
-    txs: Array<token_data__tx> | undefined;
+    txs?: Array<token_data__tx> | undefined;
+    nfts?: string[];
+    parentGroupId?: string;
   };
 }
 
@@ -39,6 +41,7 @@ export interface formated_slp_token {
     decimals: number;
     documentUri: string;
     documentHash: string;
+    parentGroupId?: string;
   };
   stats: {
     block: number;
@@ -60,5 +63,11 @@ export interface formated_slp_token {
       block: number;
       time: number;
     }[];
+  };
+  nfts?: {
+    length: number;
+    allPage: number;
+    currentPage: number;
+    txs: string[];
   };
 }

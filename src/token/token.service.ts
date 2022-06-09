@@ -94,6 +94,7 @@ export class TokenService {
         documentUri: tokenData.documentUri,
         time: details.time,
         type: this.getTypeName(tokenData.type),
+        parentGroupId: tokenData.parentGroupId,
       },
       stats: {
         block: tokenData.blockCreated,
@@ -105,6 +106,7 @@ export class TokenService {
         tokensInCirculation: tokenData.tokensInCirculationStr,
       },
       tx: await this.getTxsInfo(tokenData),
+      nfts: this.getNftsChild(tokenData),
     };
   }
 
@@ -199,5 +201,24 @@ export class TokenService {
 
     //
     return Promise.all(promises);
+  }
+
+  //
+  getNftsChild(
+    tokenData: indexer_slp_token['tokenData'],
+    index = 0,
+  ): formated_slp_token['nfts'] {
+    if (!tokenData.nfts) return;
+
+    //
+    tokenData.nfts.reverse();
+
+    //
+    return {
+      length: tokenData.nfts.length,
+      allPage: Math.ceil(tokenData.nfts.length / 7),
+      currentPage: index + 1,
+      txs: slice(tokenData.nfts, index * 7, (index + 1) * 7),
+    };
   }
 }
