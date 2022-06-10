@@ -16,7 +16,7 @@ import { AddressModule } from './address/address.module';
     }),
     CacheModule.register({
       isGlobal: true,
-      ttl: 30,
+      ttl: 60,
     }),
   ],
   controllers: [],
