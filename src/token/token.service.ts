@@ -28,7 +28,7 @@ export class TokenService {
   async fatchTokenData(tokenId: string, withTxHistory = false, _cache = false) {
     try {
       //
-      const cacheKey = `token-${tokenId}`;
+      const cacheKey = `token-${tokenId}-${withTxHistory}`;
 
       //
       const cache = !withTxHistory && _cache;
@@ -56,7 +56,7 @@ export class TokenService {
       );
 
       //
-      if (cache) this.CacheManager.set(cacheKey, tokenData);
+      this.CacheManager.set(cacheKey, tokenData);
 
       // Return result data
       return tokenData;
