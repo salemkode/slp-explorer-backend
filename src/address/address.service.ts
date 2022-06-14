@@ -136,53 +136,32 @@ export class AddressService {
 
       // Calc amount
       let qty = 0;
-      let type: transaction_item['type'] = 'RECV';
 
       //
       txData.vin.forEach((input) => {
-        if (input.address === address) {
+        if (input.address === address && input.tokenQty !== null) {
+          qty = qty + input.tokenQty;
+        }
+      });
+
+      //
+      txData.vout.forEach((input) => {
+        const addresses = input.scriptPubKey.addresses;
+
+        //
+        if (addresses && addresses.includes(address)) {
           if (input.tokenQty !== null) {
-            qty = qty + input.tokenQty;
-            type = 'SEND';
+            qty = qty - input.tokenQty;
           }
         }
       });
 
       //
-      if (type === 'RECV') {
-        qty = 0;
-
-        //
-        txData.vout.forEach((input) => {
-          const addresses = input.scriptPubKey.addresses;
-
-          //
-          if (addresses && addresses.includes(address)) {
-            if (input.tokenQty !== null) {
-              qty = qty + input.tokenQty;
-            }
-          }
-        });
-      } else {
-        //
-        txData.vout.forEach((input) => {
-          const addresses = input.scriptPubKey.addresses;
-
-          //
-          if (addresses && addresses.includes(address)) {
-            if (input.tokenQty !== null) {
-              qty = qty - input.tokenQty;
-            }
-          }
-        });
-      }
-
-      //
       return {
         block: +tx.height,
         txid: tx.txid,
-        type,
-        qty,
+        type: qty >= 0 ? 'SEND' : 'RECV',
+        qty: Math.abs(qty),
         tokenId: txData.tokenId,
         tokenName: txData.tokenName,
       };
