@@ -32,3 +32,23 @@ export interface getTransactionDetails {
     blocktime: number;
   };
 }
+
+export interface getBlock {
+  bits: string;
+  chainwork: string;
+  confirmations: number;
+  difficulty: number;
+  hash: string;
+  height: number;
+  mediantime: number;
+  merkleroot: string;
+  nTx: number;
+  nextblockhash: string;
+  nonce: number;
+  previousblockhash: string;
+  size: number;
+  time: number;
+  tx: string[];
+  version: number;
+  versionHex: number;
+}

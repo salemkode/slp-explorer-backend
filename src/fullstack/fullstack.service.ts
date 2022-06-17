@@ -2,7 +2,8 @@ import axios from 'axios';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AxiosService } from 'src/axios/axios.service';
-import { getTransactionDetails } from './fullstack.type';
+import { getTransactionDetails, getBlock } from './fullstack.type';
+import { number } from 'yargs';
 
 @Injectable()
 export class FullstackService extends AxiosService {
@@ -21,5 +22,27 @@ export class FullstackService extends AxiosService {
   // https://api.fullstack.cash/v5/electrumx/tx/data/:txid
   getTransactionDetails(txid: string): Promise<getTransactionDetails> {
     return this.get<getTransactionDetails>(`electrumx/tx/data/${txid}`);
+  }
+
+  //
+  async getBlock(hashOrHeight: string | number): Promise<getBlock> {
+    let blockhash: string;
+
+    // Get hash from block
+    if (typeof hashOrHeight === 'number') {
+      blockhash = await this.getBlockHash(hashOrHeight);
+    } else {
+      blockhash = hashOrHeight;
+    }
+
+    //
+    return await this.post<getBlock>(`/blockchain/getBlock`, {
+      blockhash,
+    });
+  }
+
+  //
+  getBlockHash(height: number): Promise<string> {
+    return this.get<string>(`/blockchain/getBlockHash/${height}`);
   }
 }
