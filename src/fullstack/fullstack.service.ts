@@ -3,7 +3,6 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AxiosService } from 'src/axios/axios.service';
 import { getTransactionDetails, getBlock } from './fullstack.type';
-import { number } from 'yargs';
 
 @Injectable()
 export class FullstackService extends AxiosService {
