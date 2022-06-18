@@ -1,3 +1,5 @@
+import { formated_slp_token } from 'src/token/token.type';
+
 //
 export interface indexer_slp_tx {
   txData: {
@@ -75,7 +77,7 @@ export interface formated_slp_tx {
     creator: string;
   };
   token: {
-    type: number;
+    type: formated_slp_token['details']['type'];
     ticker: string;
     name: string;
     tokenId: string;

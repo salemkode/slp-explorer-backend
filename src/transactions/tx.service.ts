@@ -9,6 +9,7 @@ import { toSlpAddress } from 'bchaddrjs-slp';
 import { Cache } from 'cache-manager';
 import { FullstackService } from 'src/fullstack/fullstack.service';
 import { IndexerService } from 'src/indexer/indexer.service';
+import { TokenService } from 'src/token/token.service';
 import { formated_slp_tx, indexer_slp_tx } from './tx.type';
 
 @Injectable()
@@ -16,6 +17,7 @@ export class TxService {
   constructor(
     private IndexerService: IndexerService,
     private Fullstack: FullstackService,
+    private TokenService: TokenService,
     @Inject(CACHE_MANAGER) private CacheManager: Cache,
   ) {}
 
@@ -88,7 +90,7 @@ export class TxService {
         decimals: txData.tokenDecimals,
         documentUri: txData.tokenUri,
         documentHash: txData.tokenDocHash,
-        type: txData.tokenType,
+        type: this.TokenService.getTypeName(txData.tokenType),
       },
       inputs: this.getInputs(txData),
       outputs: this.getOutputs(txData),
