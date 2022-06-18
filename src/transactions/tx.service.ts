@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   CACHE_MANAGER,
+  forwardRef,
   Inject,
   Injectable,
 } from '@nestjs/common';
@@ -15,9 +16,10 @@ import { formated_slp_tx, indexer_slp_tx } from './tx.type';
 @Injectable()
 export class TxService {
   constructor(
+    @Inject(forwardRef(() => TokenService))
+    private TokenService: TokenService,
     private IndexerService: IndexerService,
     private Fullstack: FullstackService,
-    private TokenService: TokenService,
     @Inject(CACHE_MANAGER) private CacheManager: Cache,
   ) {}
 

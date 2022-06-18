@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   CACHE_MANAGER,
+  forwardRef,
   Inject,
   Injectable,
 } from '@nestjs/common';
@@ -20,6 +21,7 @@ import { Cache } from 'cache-manager';
 export class TokenService {
   constructor(
     private IndexerService: IndexerService,
+    @Inject(forwardRef(() => TxService))
     private TxService: TxService,
     @Inject(CACHE_MANAGER) private CacheManager: Cache,
   ) {}
