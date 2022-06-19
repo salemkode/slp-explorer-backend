@@ -43,7 +43,7 @@ export class TxService {
       }
 
       //
-      const txData = await this.IndexerService.post<indexer_slp_tx>('txid', {
+      const txData = await this.IndexerService.post<indexer_slp_tx>('tx', {
         txid,
       });
 
