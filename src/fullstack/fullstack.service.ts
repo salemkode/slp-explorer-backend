@@ -1,21 +1,29 @@
 import axios from 'axios';
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { AxiosService } from 'src/axios/axios.service';
 import { getTransactionDetails, getBlock } from './fullstack.type';
+import config from 'src/config/configuration';
+import * as apiToken from './fullstack.token';
 
 @Injectable()
 export class FullstackService extends AxiosService {
-  constructor(config: ConfigService) {
+  constructor() {
     super(
       axios.create({
-        baseURL: config.get('fullstack.url'),
-        headers: {
-          // For fullstack api
-          Authorization: `Token ${config.get('indexer.jwt')}`,
-        },
+        baseURL: config.fullstack.url,
       }),
     );
+
+    apiToken.onRefresh((token) => {
+      this.updateInstance(
+        axios.create({
+          baseURL: config.fullstack.url,
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        }),
+      );
+    });
   }
 
   // https://api.fullstack.cash/v5/electrumx/tx/data/:txid
@@ -25,18 +33,18 @@ export class FullstackService extends AxiosService {
 
   //
   async getBlock(hashOrHeight: string | number): Promise<getBlock> {
-    let blockhash: string;
+    let blockHash: string;
 
     // Get hash from block
     if (typeof hashOrHeight === 'number') {
-      blockhash = await this.getBlockHash(hashOrHeight);
+      blockHash = await this.getBlockHash(hashOrHeight);
     } else {
-      blockhash = hashOrHeight;
+      blockHash = hashOrHeight;
     }
 
     //
     return await this.post<getBlock>(`/blockchain/getBlock`, {
-      blockhash,
+      blockHash,
     });
   }
 
