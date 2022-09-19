@@ -29,7 +29,7 @@ export class AddressService {
   }
 
   //
-  async fatchAddressData(address: string): Promise<indexer_slp_address> {
+  async fetchAddressData(address: string): Promise<indexer_slp_address> {
     try {
       const result = await this.IndexerService.post<indexer_slp_address>(
         'address',
@@ -53,8 +53,8 @@ export class AddressService {
 
   //
   async getAddressData(address: string): Promise<formated_slp_address> {
-    // Fatch address data from slp explorer
-    const addressData = await this.fatchAddressData(address);
+    // fetch address data from slp explorer
+    const addressData = await this.fetchAddressData(address);
 
     // Formated data
     return await this.formatAddressData(addressData, address);
@@ -88,7 +88,7 @@ export class AddressService {
     async function getTokenPromise(
       token: indexer_slp_address['balance']['balances'][0],
     ): Promise<balance_item> {
-      const { tokenData } = await TokenService.fatchTokenData(
+      const { tokenData } = await TokenService.fetchTokenData(
         token.tokenId,
         false,
         true,
@@ -132,7 +132,7 @@ export class AddressService {
     async function getTransactionsPromise(
       tx: indexer_slp_address['balance']['txs'][0],
     ): Promise<Transactions> {
-      const { txData } = await TxService.fatchTxData(tx.txid, true);
+      const { txData } = await TxService.fetchTxData(tx.txid, true);
 
       // Calc amount
       let qty = 0;

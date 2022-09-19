@@ -24,7 +24,7 @@ export class TxService {
   ) {}
 
   //
-  async fatchTxData(txid: string, cache = false): Promise<indexer_slp_tx> {
+  async fetchTxData(txid: string, cache = false): Promise<indexer_slp_tx> {
     try {
       //
       const cacheKey = `tx-${txid}`;
@@ -62,8 +62,8 @@ export class TxService {
 
   //
   async getTxData(txid: string): Promise<formated_slp_tx> {
-    // Fatch data from slp explorer
-    const data = await this.fatchTxData(txid);
+    // fetch data from slp explorer
+    const data = await this.fetchTxData(txid);
 
     // Formated data
     return this.formatTxData(data);

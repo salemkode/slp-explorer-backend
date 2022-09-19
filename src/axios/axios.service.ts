@@ -5,6 +5,10 @@ import axios, { AxiosInstance } from 'axios';
 export class AxiosService {
   constructor(private instance: AxiosInstance = axios.create()) {}
 
+  async updateInstance(instance: AxiosInstance) {
+    this.instance = instance;
+  }
+
   async get<Result>(url: string, body?: unknown): Promise<Result> {
     return (await this.instance.get<Result>(url, body)).data;
   }

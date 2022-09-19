@@ -27,7 +27,7 @@ export class TokenService {
   ) {}
 
   //
-  async fatchTokenData(tokenId: string, withTxHistory = false, _cache = false) {
+  async fetchTokenData(tokenId: string, withTxHistory = false, _cache = false) {
     try {
       //
       const cacheKey = `token-${tokenId}-${withTxHistory}`;
@@ -69,10 +69,10 @@ export class TokenService {
 
   //
   async getTokenData(tokenid: string): Promise<formated_slp_token> {
-    // Fatch token data from slp explorer
-    const tokenData = await this.fatchTokenData(tokenid, true);
+    // fetch token data from slp explorer
+    const tokenData = await this.fetchTokenData(tokenid, true);
 
-    // Fatch transactions data from slp explorer
+    // fetch transactions data from slp explorer
     const txData = await this.TxService.getTxData(tokenid);
 
     // Formated data

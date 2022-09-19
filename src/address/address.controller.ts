@@ -21,7 +21,7 @@ export class AddressController {
     address = this.AddressService.getCashAddress(address);
 
     //
-    const { balance } = await this.AddressService.fatchAddressData(address);
+    const { balance } = await this.AddressService.fetchAddressData(address);
 
     //
     return this.AddressService.getFormatedBalance(balance.balances, +index);
@@ -35,7 +35,7 @@ export class AddressController {
     address = this.AddressService.getCashAddress(address);
 
     //
-    const { balance } = await this.AddressService.fatchAddressData(address);
+    const { balance } = await this.AddressService.fetchAddressData(address);
 
     //
     return this.AddressService.getFormatedTransactions(

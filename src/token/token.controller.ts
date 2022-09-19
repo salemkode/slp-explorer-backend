@@ -16,7 +16,7 @@ export class TokenController {
     @Param('tokenid') tokenid: string,
     @Param('index') index: string,
   ): Promise<formated_slp_token['tx']> {
-    const { tokenData } = await this.tokenService.fatchTokenData(
+    const { tokenData } = await this.tokenService.fetchTokenData(
       tokenid,
       true,
       true,
@@ -31,7 +31,7 @@ export class TokenController {
     @Param('tokenid') tokenid: string,
     @Param('index') index: string,
   ): Promise<formated_slp_token['nft']> {
-    const { tokenData } = await this.tokenService.fatchTokenData(
+    const { tokenData } = await this.tokenService.fetchTokenData(
       tokenid,
       true,
       true,
