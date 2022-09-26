@@ -9,7 +9,7 @@ type tokenData = {
 
 //
 const padding = true;
-const apiToken = '';
+let apiToken = '';
 
 //
 async function login() {
@@ -83,7 +83,8 @@ async function refreshApiToken() {
   }
 
   // Update api token
-  refreshFunctions.forEach((fn) => fn(apiToken));
+  apiToken = profile.apiToken;
+  refreshFunctions.forEach((fn) => fn(profile.apiToken));
 
   // set timer to refresh api token
   const remainingTokenExpiry = +new Date(profile.apiTokenExp) - +new Date();
@@ -100,7 +101,7 @@ async function refreshApiToken() {
 type refresh_fn_type = (token: string) => void;
 const refreshFunctions: refresh_fn_type[] = [];
 export function onRefresh(callback: refresh_fn_type) {
-  // Add function to lisener
+  // Add function to listener
   refreshFunctions.push(callback);
 
   // Do it for first time if we have token
