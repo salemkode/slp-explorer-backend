@@ -14,6 +14,10 @@ export class AxiosService {
   }
 
   async post<Result>(url: string, body?: unknown): Promise<Result> {
-    return (await this.instance.post<Result>(url, body)).data;
+    try {
+      return (await this.instance.post<Result>(url, body)).data;
+    } catch (e) {
+      console.log(e);
+    }
   }
 }

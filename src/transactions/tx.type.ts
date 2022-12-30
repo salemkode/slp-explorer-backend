@@ -25,13 +25,15 @@ export interface indexer_slp_tx {
     vout: Array<{
       value: number;
       n: number;
-      scriptPubKey: {
-        asm: string;
-        hex: string;
-        type: string;
-        reqSigs?: 1;
-        addresses?: string[];
-      };
+      scriptPubKey:
+        | {
+            asm: string;
+            hex: string;
+            type: string;
+            reqSigs?: 1;
+            addresses?: string[];
+          }
+        | undefined;
       opReturnData: {
         tokenType: number;
         txType: string;

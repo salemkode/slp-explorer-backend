@@ -146,11 +146,15 @@ export class TokenService {
 
   //
   getRealQty(qty: string, decimals: number): string {
-    //
-    const bigNumberQty = new BigNumber(qty);
+    try {
+      //
+      const bigNumberQty = new BigNumber(qty);
 
-    //
-    return bigNumberQty.div(10 ** decimals).toString();
+      //
+      return bigNumberQty.div(10 ** decimals).toString();
+    } catch (err) {
+      return 'Invalid BigNumber';
+    }
   }
 
   //
