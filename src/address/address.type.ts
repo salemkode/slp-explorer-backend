@@ -42,7 +42,7 @@ export type transaction_item = {
 };
 
 //
-export interface formated_slp_address {
+export interface formatted_slp_address {
   balance: {
     length: number;
     allPage: number;

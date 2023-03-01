@@ -11,7 +11,7 @@ import { Cache } from 'cache-manager';
 import { FullstackService } from 'src/fullstack/fullstack.service';
 import { IndexerService } from 'src/indexer/indexer.service';
 import { TokenService } from 'src/token/token.service';
-import { formated_slp_tx, indexer_slp_tx } from './tx.type';
+import { formatted_slp_tx, indexer_slp_tx } from './tx.type';
 
 @Injectable()
 export class TxService {
@@ -61,16 +61,16 @@ export class TxService {
   }
 
   //
-  async getTxData(txid: string): Promise<formated_slp_tx> {
+  async getTxData(txid: string): Promise<formatted_slp_tx> {
     // fetch data from slp explorer
     const data = await this.fetchTxData(txid);
 
-    // Formated data
+    // Formatted data
     return this.formatTxData(data);
   }
 
   //
-  async formatTxData({ txData }: indexer_slp_tx): Promise<formated_slp_tx> {
+  async formatTxData({ txData }: indexer_slp_tx): Promise<formatted_slp_tx> {
     let time = txData.time;
 
     //
@@ -115,8 +115,8 @@ export class TxService {
   }
 
   // Get inputs data from token data
-  getInputs(txData: indexer_slp_tx['txData']): formated_slp_tx['inputs'] {
-    const inputs: formated_slp_tx['inputs'] = [];
+  getInputs(txData: indexer_slp_tx['txData']): formatted_slp_tx['inputs'] {
+    const inputs: formatted_slp_tx['inputs'] = [];
 
     txData.vin.forEach((item) => {
       // Check is value big than zero
@@ -134,7 +134,7 @@ export class TxService {
 
   // Get outputs data from token data
   getOutputs(txData: indexer_slp_tx['txData']) {
-    const outputs: formated_slp_tx['outputs'] = [];
+    const outputs: formatted_slp_tx['outputs'] = [];
 
     //
     txData.vout.forEach((item) => {

@@ -1,4 +1,4 @@
-import { formated_slp_token } from 'src/token/token.type';
+import { formatted_slp_token } from 'src/token/token.type';
 
 //
 export interface indexer_slp_tx {
@@ -70,7 +70,7 @@ export interface indexer_slp_tx {
 }
 
 //
-export interface formated_slp_tx {
+export interface formatted_slp_tx {
   details: {
     type: string;
     block: number;
@@ -79,7 +79,7 @@ export interface formated_slp_tx {
     creator: string;
   };
   token: {
-    type: formated_slp_token['details']['type'];
+    type: formatted_slp_token['details']['type'];
     ticker: string;
     name: string;
     tokenId: string;

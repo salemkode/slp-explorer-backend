@@ -24,7 +24,7 @@ export class AddressController {
     const { balance } = await this.AddressService.fetchAddressData(address);
 
     //
-    return this.AddressService.getFormatedBalance(balance.balances, +index);
+    return this.AddressService.getFormattedBalance(balance.balances, +index);
   }
 
   @Get('/:address/transaction/:index')
@@ -38,7 +38,7 @@ export class AddressController {
     const { balance } = await this.AddressService.fetchAddressData(address);
 
     //
-    return this.AddressService.getFormatedTransactions(
+    return this.AddressService.getFormattedTransactions(
       balance.txs,
       address,
       +index,

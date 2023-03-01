@@ -6,7 +6,7 @@ import { TxService } from 'src/transactions/tx.service';
 import { reverse, slice } from 'src/util/slice';
 import {
   balance_item,
-  formated_slp_address,
+  formatted_slp_address,
   indexer_slp_address,
   transaction_item,
 } from './address.type';
@@ -52,11 +52,11 @@ export class AddressService {
   }
 
   //
-  async getAddressData(address: string): Promise<formated_slp_address> {
+  async getAddressData(address: string): Promise<formatted_slp_address> {
     // fetch address data from slp explorer
     const addressData = await this.fetchAddressData(address);
 
-    // Formated data
+    // Formatted data
     return await this.formatAddressData(addressData, address);
   }
 
@@ -64,10 +64,10 @@ export class AddressService {
   async formatAddressData(
     { balance }: indexer_slp_address,
     address: string,
-  ): Promise<formated_slp_address> {
+  ): Promise<formatted_slp_address> {
     return {
-      balance: await this.getFormatedBalance(balance.balances),
-      transaction: await this.getFormatedTransactions(balance.txs, address),
+      balance: await this.getFormattedBalance(balance.balances),
+      transaction: await this.getFormattedTransactions(balance.txs, address),
     };
   }
 
@@ -177,10 +177,10 @@ export class AddressService {
   }
 
   //
-  async getFormatedBalance(
+  async getFormattedBalance(
     balance: indexer_slp_address['balance']['balances'],
     index = 0,
-  ): Promise<formated_slp_address['balance']> {
+  ): Promise<formatted_slp_address['balance']> {
     //
     const balanceWithoutEmptyToken = balance.filter((token) => +token.qty);
 
@@ -197,11 +197,11 @@ export class AddressService {
   }
 
   //
-  async getFormatedTransactions(
+  async getFormattedTransactions(
     transaction: indexer_slp_address['balance']['txs'],
     address: string,
     index = 0,
-  ): Promise<formated_slp_address['transaction']> {
+  ): Promise<formatted_slp_address['transaction']> {
     //
     return {
       length: transaction.length,

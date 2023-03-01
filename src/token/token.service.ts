@@ -7,12 +7,12 @@ import {
 } from '@nestjs/common';
 import { IndexerService } from 'src/indexer/indexer.service';
 import { TxService } from 'src/transactions/tx.service';
-import { formated_slp_tx } from 'src/transactions/tx.type';
+import { formatted_slp_tx } from 'src/transactions/tx.type';
 import { slice } from 'src/util/slice';
 import BigNumber from 'big.js';
 import {
   indexer_slp_token,
-  formated_slp_token,
+  formatted_slp_token,
   token_data__tx,
 } from './token.type';
 import { Cache } from 'cache-manager';
@@ -68,22 +68,22 @@ export class TokenService {
   }
 
   //
-  async getTokenData(tokenid: string): Promise<formated_slp_token> {
+  async getTokenData(tokenid: string): Promise<formatted_slp_token> {
     // fetch token data from slp explorer
     const tokenData = await this.fetchTokenData(tokenid, true);
 
     // fetch transactions data from slp explorer
     const txData = await this.TxService.getTxData(tokenid);
 
-    // Formated data
+    // Formatted data
     return await this.formatTokenData(tokenData, txData);
   }
 
   //
   async formatTokenData(
     { tokenData }: indexer_slp_token,
-    { details }: formated_slp_tx,
-  ): Promise<formated_slp_token> {
+    { details }: formatted_slp_tx,
+  ): Promise<formatted_slp_token> {
     //
     return {
       details: {
@@ -132,7 +132,7 @@ export class TokenService {
   async getTxsInfo(
     tokenData: indexer_slp_token['tokenData'],
     index = 0,
-  ): Promise<formated_slp_token['tx']> {
+  ): Promise<formatted_slp_token['tx']> {
     tokenData.txs.reverse();
 
     //
@@ -162,10 +162,10 @@ export class TokenService {
     txs: indexer_slp_token['tokenData']['txs'],
     i: number,
     decimals: number,
-  ): Promise<formated_slp_token['tx']['txs']> {
+  ): Promise<formatted_slp_token['tx']['txs']> {
     //
-    type formatedTxType = formated_slp_token['tx']['txs'][0];
-    const promises: Promise<formatedTxType>[] = [];
+    type formattedTxType = formatted_slp_token['tx']['txs'][0];
+    const promises: Promise<formattedTxType>[] = [];
 
     //
     const getTxWithTimePromise = async (tx: token_data__tx) => {
@@ -213,7 +213,7 @@ export class TokenService {
   getNftsChild(
     tokenData: indexer_slp_token['tokenData'],
     index = 0,
-  ): formated_slp_token['nft'] {
+  ): formatted_slp_token['nft'] {
     if (!tokenData.nfts) return;
 
     //

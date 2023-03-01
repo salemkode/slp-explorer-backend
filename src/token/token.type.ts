@@ -30,7 +30,7 @@ export interface indexer_slp_token {
 }
 
 //
-export interface formated_slp_token {
+export interface formatted_slp_token {
   details: {
     tokenId: string;
     type: 'type1' | 'nft1_group' | 'nft1_child' | 'unknown';

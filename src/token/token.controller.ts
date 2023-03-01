@@ -1,6 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { TokenService } from './token.service';
-import { formated_slp_token } from './token.type';
+import { formatted_slp_token } from './token.type';
 
 @Controller('/token/')
 export class TokenController {
@@ -15,7 +15,7 @@ export class TokenController {
   async getTokenTxsIndex(
     @Param('tokenid') tokenid: string,
     @Param('index') index: string,
-  ): Promise<formated_slp_token['tx']> {
+  ): Promise<formatted_slp_token['tx']> {
     const { tokenData } = await this.tokenService.fetchTokenData(
       tokenid,
       true,
@@ -30,7 +30,7 @@ export class TokenController {
   async getTokenNftsIndex(
     @Param('tokenid') tokenid: string,
     @Param('index') index: string,
-  ): Promise<formated_slp_token['nft']> {
+  ): Promise<formatted_slp_token['nft']> {
     const { tokenData } = await this.tokenService.fetchTokenData(
       tokenid,
       true,
