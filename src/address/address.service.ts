@@ -182,17 +182,17 @@ export class AddressService {
     index = 0,
   ): Promise<formatted_slp_address['balance']> {
     //
-    const balanceWithoutEmptyToken = balance.filter((token) => +token.qty);
+    const validTokens = balance.filter((token) => +token.qty);
 
     //
-    const balances = await this.getBalances(balanceWithoutEmptyToken, index);
+    const balancesList = await this.getBalances(validTokens, index);
 
     //
     return {
-      length: balanceWithoutEmptyToken.length,
-      allPage: Math.ceil(balances.length / 7),
+      length: validTokens.length,
+      allPage: Math.ceil(validTokens.length / 7),
       currentPage: index + 1,
-      balances,
+      balances: balancesList,
     };
   }
 
